@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { BarLoader,GridLoader
+import {
+    BarLoader, GridLoader
 } from 'react-spinners';
 
 export default function TaskA() {
@@ -8,27 +9,33 @@ export default function TaskA() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        setTimeout(()=>{
-            axios.get("https://jsonplaceholder.typicode.com/users")
-            .then((res) => {
-                setData(res.data)
-                setLoading(false);
-            })
-        },5000)
-        // axios.get("https://jsonplaceholder.typicode.com/users")
-        //     .then((res) => {
-        //         setData(res.data)
-        //         setLoading(false);
-        //     })
-       
 
+        setTimeout(() => {
+            // // "https://jsonplaceholder.typicode.com/users"
+            axios.get("https://jsonplaceholder.typicode.com/users")
+                .then((res) => {
+
+                    if (res.ok) {
+                        throw new Error("throw error : ")
+                    }
+
+                    setData(res.data)
+                    setLoading(false);
+                })
+                .catch((error) => {
+
+
+                    alert("API data is not fetched!!! " + error.message);
+                    setLoading(false);
+                });
+        }, 2000)
     }, [])
 
     if (loading) {
         return (
             <div>
-                <BarLoader loading={loading} style={{textAlign:"center"}}/>
-                <GridLoader loading={loading} style={{}}/>
+                <BarLoader loading={loading} style={{ textAlign: "center" }} />
+                <GridLoader loading={loading} style={{}} />
 
             </div>
         )
@@ -38,9 +45,6 @@ export default function TaskA() {
 
     return (
         <>
-
-            
-
             <div>
                 {
                     data.map((item) => {
@@ -55,9 +59,6 @@ export default function TaskA() {
                     })
                 }
             </div>
-
-
-
         </>
     )
 }
